@@ -3,7 +3,7 @@ import { Component } from 'react';
 class ImageGallery extends Component {
   render() {
     const { images, onImageClick } = this.props;
-    console.log('images :>> ', images);
+
     return (
       <ul className="ImageGallery">
         {images.map(image => (

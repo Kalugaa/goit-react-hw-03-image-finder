@@ -14,6 +14,7 @@ class App extends Component {
     images: [],
     isLoading: false,
     selectedImage: null,
+    totalHits: null,
   };
   componentDidMount() {
     // this.fetchImages();
@@ -44,7 +45,9 @@ class App extends Component {
             page === 1
               ? response.data.hits
               : [...prevState.images, ...response.data.hits],
+          totalHits: response.data.totalHits,
         }));
+        console.log('response', response);
       })
       .catch(error => console.error('Error fetching images: ', error))
       .finally(() => this.setState({ isLoading: false }));
@@ -70,14 +73,16 @@ class App extends Component {
   };
 
   render() {
-    const { images, isLoading, selectedImage } = this.state;
-    console.log('this.state :>> ', this.state);
+    const { images, isLoading, selectedImage, totalHits } = this.state;
+    console.log('totalHits', totalHits);
     return (
       <div className="app">
         <SearchBar onInputChange={this.handleInputChange} />
         <ImageGallery images={images} onImageClick={this.handleImageClick} />
         {isLoading && <Loader />}
-        {images.length > 0 && <Button onLoadMore={this.loadMoreImages} />}
+        {images.length > 0 && images.length < totalHits && (
+          <Button onLoadMore={this.loadMoreImages} />
+        )}
         {selectedImage && (
           <Modal selectedImage={selectedImage} onCloseModal={this.closeModal} />
         )}
